@@ -1,0 +1,17 @@
+<resources>
+    <string name="app_name">The Movie Db Application</string>
+    <string name="movie_item_bgr">Movie item background</string>
+    <string name="trending_item_today">Today</string>
+    <string name="trending_item_week">This week</string>
+    <string name="trending_label">Trending</string>
+    <string name="latest_trailers_label">Latest Trailers</string>
+    <string name="trending_bgr">trending_bgr</string>
+    <string name="header_poster">Header poster</string>
+    <string name="oscars_bgr">oscars_bgr</string>
+    <string name="view_the_winners">View the winners</string>
+    <string name="oscar_title">Oscar title</string>
+    <string name="welcome">Welcome.</string>
+    <string name="welcome_title">Millions of movies, TV shows and people to discover. Explore now.</string>
+    <string name="search_hint">Search for movies, TV shows, people...</string>
+    <string name="search">Search</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="tmdbDarkBlue">#032541</color>
+    <color name="tmdbLightBlue">#01B4E4</color>
+    <color name="tmdbLightGreen">#1ed5a9</color>
+    <color name="tmdbLighterGreen">#C0FECF</color>
+    <color name="gray_rgba">#77000000</color>
+</resources>
