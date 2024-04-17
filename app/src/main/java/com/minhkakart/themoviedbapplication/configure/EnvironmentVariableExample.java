@@ -1,7 +1,7 @@
 package com.minhkakart.themoviedbapplication.configure;
 
 public class EnvironmentVariableExample {
-
+    // Make a copy of this file and rename it to EnvironmentVariable.java
     // Replace YOUR_API_KEY and YOUR AUTH_TOKEN with your own API key and Auth token
 
 //    public static final String API_KEY = "YOUR_API_KEY";
