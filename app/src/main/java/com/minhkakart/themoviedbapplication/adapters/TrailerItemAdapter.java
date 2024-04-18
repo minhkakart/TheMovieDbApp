@@ -1,8 +1,12 @@
 package com.minhkakart.themoviedbapplication.adapters;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
 import android.content.Intent;
+import android.media.AudioAttributes;
+import android.media.MediaPlayer;
 import android.net.Uri;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,6 +25,7 @@ import com.minhkakart.themoviedbapplication.retrofit.models.trending.TrendingMov
 import com.minhkakart.themoviedbapplication.retrofit.service.TmdbImageApiService;
 import com.squareup.picasso.Picasso;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -29,11 +34,20 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.TrailerItemViewHolder> {
-    List<TrendingMovieResult> movieList = new ArrayList<>();
+    private List<TrendingMovieResult> movieList = new ArrayList<>();
+    private boolean pendingLoad = false;
+    private static final int pendingItemCount = 5;
+
+    @SuppressLint("NotifyDataSetChanged")
+    public void setPendingLoad(boolean pendingLoad) {
+        this.pendingLoad = pendingLoad;
+        notifyDataSetChanged();
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setMovieList(List<TrendingMovieResult> movieList) {
         this.movieList = movieList;
+        pendingLoad = false;
         notifyDataSetChanged();
     }
 
@@ -46,12 +60,19 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull TrailerItemAdapter.TrailerItemViewHolder holder, int position) {
+        if (pendingLoad) {
+            holder.bindPlaceholder();
+            return;
+        }
         TrendingMovieResult movieResult = movieList.get(position);
         holder.bind(movieResult);
     }
 
     @Override
     public int getItemCount() {
+        if (pendingLoad) {
+            return pendingItemCount;
+        }
         return movieList.size();
     }
 
@@ -68,7 +89,6 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
         }
 
         public void bind(TrendingMovieResult movieResult) {
-            clearInfo();
             Call<MovieDetail> movieDetailCall = MainActivity.tmdbApi.getMovieDetail(movieResult.getId(), "videos");
             movieDetailCall.enqueue(new Callback<MovieDetail>() {
                 @Override
@@ -78,7 +98,7 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
                         if (movieDetail != null) {
                             Picasso.get()
                                     .load(TmdbImageApiService.getBackdropMediumUrl(movieDetail.getBackdropPath()))
-                                    .placeholder(R.drawable.video_placeholder)
+                                    .placeholder(R.drawable.play_button_svgrepo_com)
                                     .error(R.drawable.image_load_failed)
                                     .into(ivTrailer, new com.squareup.picasso.Callback() {
                                         @Override
@@ -89,7 +109,8 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
                                                     tvTrailerDesc.setText(videoResult.getName());
                                                     ivPlay.setOnClickListener(v -> {
                                                         // Open youtube
-                                                        Intent openYoutube = new Intent(Intent.ACTION_VIEW, Uri.parse(EnvironmentVariable.YOUTUBE_URL + videoResult.getKey()));
+                                                        Uri uri = Uri.parse(EnvironmentVariable.YOUTUBE_URL + videoResult.getKey());
+                                                        Intent openYoutube = new Intent(Intent.ACTION_VIEW, uri);
                                                         v.getContext().startActivity(openYoutube);
                                                     });
                                                     break;
@@ -99,7 +120,7 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
 
                                         @Override
                                         public void onError(Exception e) {
-
+                                            Log.e("Picasso", "onError: ", e);
                                         }
                                     });
                         }
@@ -114,7 +135,8 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
         }
 
         public void bindPlaceholder() {
-            // Do nothing
+            ivTrailer.setImageResource(R.drawable.play_button_svgrepo_com);
+            clearInfo();
         }
 
         public void clearInfo() {

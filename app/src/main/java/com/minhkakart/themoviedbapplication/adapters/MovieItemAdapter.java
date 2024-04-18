@@ -1,6 +1,7 @@
 package com.minhkakart.themoviedbapplication.adapters;
 
 import android.annotation.SuppressLint;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,7 +26,7 @@ import java.util.List;
 public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.ViewHolder>{
 
     private List<TrendingMovieResult> trendingMovieResults = new ArrayList<>();
-    private static boolean pendingLoad = false;
+    private boolean pendingLoad = false;
     private static final int pendingItemCount = 5;
 
     @SuppressLint("NotifyDataSetChanged")
@@ -37,7 +38,7 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
 
     @SuppressLint("NotifyDataSetChanged")
     public void setPendingLoad(boolean pendingLoad){
-        MovieItemAdapter.pendingLoad = pendingLoad;
+        this.pendingLoad = pendingLoad;
         notifyDataSetChanged();
     }
 
@@ -86,10 +87,9 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
                         public void onSuccess() {
                             showInfo();
                         }
-
                         @Override
                         public void onError(Exception e) {
-
+                            Log.e("Picasso", "onError: ", e);
                         }
                     });
 

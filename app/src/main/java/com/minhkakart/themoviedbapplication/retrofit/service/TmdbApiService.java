@@ -18,6 +18,6 @@ public interface TmdbApiService {
     @GET("movie/{movie_id}")
     Call<MovieDetail> getMovieDetail(@Path("movie_id") int movieId, @Query("append_to_response") String appendToResponse);
 
-    @GET("movie/upcoming")
-    Call<TrendingMovieResponse> getUpcomingMovie();
+    @GET("movie/{keyword}?language=vi-VN")
+    Call<TrendingMovieResponse> getMoviesList(@Path("keyword") String keyword, @Query("page") int page);
 }

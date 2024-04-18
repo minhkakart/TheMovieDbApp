@@ -8,7 +8,7 @@
     <string name="trending_bgr">trending_bgr</string>
     <string name="header_poster">Header poster</string>
     <string name="oscars_bgr">oscars_bgr</string>
-    <string name="view_the_winners">View the winners</string>
+    <string name="view_the_winners">View the winners\ </string>
     <string name="oscar_title">Oscar title</string>
     <string name="welcome">Welcome.</string>
     <string name="welcome_title">Millions of movies, TV shows and people to discover. Explore now.</string>
@@ -22,4 +22,10 @@
     <string name="trailer_play_icon">trailer play icon</string>
     <string name="trailer_title">Hành Tinh Khỉ: Vương Quốc Mới</string>
     <string name="trailer_description">Trailer #1</string>
+    <string name="upcoming">Upcoming</string>
+    <string name="popular">Popular</string>
+    <string name="now_playing">Now playing</string>
+    <string name="top_rated">Top rated</string>
+    <string name="movies">Movies</string>
+    <string name="see_all">See all\ </string>
 </resources>
