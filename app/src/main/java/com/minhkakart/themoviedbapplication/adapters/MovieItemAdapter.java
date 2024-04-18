@@ -95,7 +95,10 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
 
             tvMovieName.setText(trendingMovieResult.getTitle());
             float voteAverage = ((int) (trendingMovieResult.getVoteAverage() * 10)) / (float) 10;
-            if (voteAverage < 2.5) {
+            if (voteAverage == 0 && trendingMovieResult.getVoteCount() == 0) {
+                tvVoteAverage.setText("N/R");
+                cpiRating.setProgress(0);
+            } else if (voteAverage < 2.5) {
                 tvVoteAverage.setTextColor(tvVoteAverage.getResources().getColor(R.color.red, null));
                 cpiRating.setIndicatorColor(tvVoteAverage.getResources().getColor(R.color.red, null));
             } else if (voteAverage < 5) {

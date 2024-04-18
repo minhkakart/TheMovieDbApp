@@ -86,7 +86,7 @@ public class MovieDetail {
     private int voteCount;
     @SerializedName("videos")
     @Expose
-    private Videos videos;
+    private VideoAppendToResponse videoAppendToResponse;
     @SerializedName("images")
     @Expose
     private Images images;
@@ -299,12 +299,12 @@ public class MovieDetail {
         this.voteCount = voteCount;
     }
 
-    public Videos getVideos() {
-        return videos;
+    public VideoAppendToResponse getVideos() {
+        return videoAppendToResponse;
     }
 
-    public void setVideos(Videos videos) {
-        this.videos = videos;
+    public void setVideos(VideoAppendToResponse videoAppendToResponse) {
+        this.videoAppendToResponse = videoAppendToResponse;
     }
 
     public Images getImages() {

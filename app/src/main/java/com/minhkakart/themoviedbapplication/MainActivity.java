@@ -14,6 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.tabs.TabLayout;
 import com.minhkakart.themoviedbapplication.adapters.MovieItemAdapter;
+import com.minhkakart.themoviedbapplication.adapters.TrailerItemAdapter;
+import com.minhkakart.themoviedbapplication.retrofit.models.MovieDetail;
 import com.minhkakart.themoviedbapplication.retrofit.models.trending.TrendingMovieResponse;
 import com.minhkakart.themoviedbapplication.retrofit.service.TmdbApiService;
 import com.minhkakart.themoviedbapplication.retrofit.service.TmdbService;
@@ -23,8 +25,9 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class MainActivity extends AppCompatActivity {
-    private TmdbApiService tmdbApi;
+    public static final TmdbApiService tmdbApi = TmdbService.getTmdbInstance();
     private MovieItemAdapter movieItemAdapter;
+    private final TrailerItemAdapter trailerItemAdapter = new TrailerItemAdapter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -37,7 +40,6 @@ public class MainActivity extends AppCompatActivity {
             return insets;
         });
 
-        tmdbApi = TmdbService.getTmdbInstance();
         TabLayout tlTrending = findViewById(R.id.tlTrending);
         tlTrending.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -67,6 +69,29 @@ public class MainActivity extends AppCompatActivity {
 
         getTrending("day");
 
+        // Get upcoming movies
+        RecyclerView rvUpcoming = findViewById(R.id.rvTrailers);
+        rvUpcoming.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        rvUpcoming.setAdapter(trailerItemAdapter);
+        getUpcoming();
+
+    }
+
+    private void getUpcoming() {
+        Call<TrendingMovieResponse> call = tmdbApi.getUpcomingMovie();
+        call.enqueue(new Callback<TrendingMovieResponse>() {
+            @Override
+            public void onResponse(@NonNull Call<TrendingMovieResponse> call, @NonNull Response<TrendingMovieResponse> response) {
+                TrendingMovieResponse trendingMovieResponse = response.body();
+                assert trendingMovieResponse != null;
+                trailerItemAdapter.setMovieList(trendingMovieResponse.getResults());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<TrendingMovieResponse> call, @NonNull Throwable t) {
+                Log.e("Upcoming", "Error: " + t.getMessage());
+            }
+        });
     }
 
     private void getTrending(String timeWindow){

@@ -4,7 +4,7 @@
     <string name="trending_item_today">Today</string>
     <string name="trending_item_week">This week</string>
     <string name="trending_label">Trending</string>
-    <string name="latest_trailers_label">Latest Trailers</string>
+    <string name="upcoming_trailers_label">Upcoming Trailers</string>
     <string name="trending_bgr">trending_bgr</string>
     <string name="header_poster">Header poster</string>
     <string name="oscars_bgr">oscars_bgr</string>
@@ -17,4 +17,9 @@
     <string name="movie_name_eg">Biệt Đội Săn Ma: Kỷ Nguyên Băng Giá</string>
     <string name="release_date_eg">Mar 20, 2024</string>
     <string name="rate_value_eg">80</string>
+    <string name="trailer_filter_layer">filter layer</string>
+    <string name="trailer_bgr">trailer background</string>
+    <string name="trailer_play_icon">trailer play icon</string>
+    <string name="trailer_title">Hành Tinh Khỉ: Vương Quốc Mới</string>
+    <string name="trailer_description">Trailer #1</string>
 </resources>

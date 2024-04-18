@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class Videos {
+public class VideoAppendToResponse {
     @SerializedName("results")
     @Expose
     private List<VideoResult> results;
@@ -14,7 +14,4 @@ public class Videos {
         return results;
     }
 
-    public void setResults(List<VideoResult> results) {
-        this.results = results;
-    }
 }
