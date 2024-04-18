@@ -8,31 +8,31 @@ import java.util.List;
 public class TrendingResult {
     @SerializedName("backdrop_path")
     @Expose
-    private String backdropPath;
+    protected String backdropPath;
     @SerializedName("id")
     @Expose
-    private int id;
+    protected int id;
     @SerializedName("overview")
     @Expose
-    private String overview;
+    protected String overview;
     @SerializedName("poster_path")
     @Expose
-    private String posterPath;
+    protected String posterPath;
     @SerializedName("media_type")
     @Expose
-    private String mediaType;
+    protected String mediaType;
     @SerializedName("adult")
     @Expose
-    private boolean adult;
+    protected boolean adult;
     @SerializedName("original_language")
     @Expose
-    private String originalLanguage;
+    protected String originalLanguage;
     @SerializedName("genre_ids")
     @Expose
-    private List<Integer> genreIds;
+    protected List<Integer> genreIds;
     @SerializedName("popularity")
     @Expose
-    private float popularity;
+    protected float popularity;
 
     public String getBackdropPath() {
         return backdropPath;
