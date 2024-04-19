@@ -1,4 +1,4 @@
-package com.minhkakart.themoviedbapplication.retrofit.models.trending;
+package com.minhkakart.themoviedbapplication.models.network;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -7,42 +7,39 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 
-public class TrendingMovieResult extends TrendingResult {
-    @SerializedName("original_title")
+public class TVResult extends Result {
+    @SerializedName("original_name")
     @Expose
-    private String originalTitle;
-    @SerializedName("title")
+    private String originalName;
+    @SerializedName("name")
     @Expose
-    private String title;
-    @SerializedName("release_date")
+    private String name;
+    @SerializedName("first_air_date")
     @Expose
-    private String releaseDate;
-    @SerializedName("video")
-    @Expose
-    private boolean video;
+    private String firstAirDate;
     @SerializedName("vote_average")
     @Expose
     private float voteAverage;
     @SerializedName("vote_count")
     @Expose
     private int voteCount;
+    @SerializedName("origin_country")
+    @Expose
+    private List<String> originCountry;
 
-    public String getOriginalTitle() {
-        return originalTitle;
+    public String getOriginalName() {
+        return originalName;
     }
 
-    public String getTitle() {
-        return title;
+    public String getName() {
+        return name;
     }
 
-    public String getReleaseDate() {
-        return releaseDate;
-    }
-
-    public boolean isVideo() {
-        return video;
+    public String getFirstAirDate() {
+        return firstAirDate;
     }
 
     public float getVoteAverage() {
@@ -53,8 +50,12 @@ public class TrendingMovieResult extends TrendingResult {
         return voteCount;
     }
 
+    public List<String> getOriginCountry() {
+        return originCountry;
+    }
+
     public Date getReleaseDateAsDate() throws ParseException {
-        return parseDate(releaseDate);
+        return parseDate(firstAirDate);
     }
 
     private Date parseDate(String releaseDate) throws ParseException {

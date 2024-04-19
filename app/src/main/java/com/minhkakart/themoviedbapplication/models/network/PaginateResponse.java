@@ -1,29 +1,29 @@
-package com.minhkakart.themoviedbapplication.retrofit.models.trending;
+package com.minhkakart.themoviedbapplication.models.network;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class TrendingMovieResponse {
+public class PaginateResponse<T extends Result> {
     @SerializedName("page")
     @Expose
-    public int page;
+    private int page;
     @SerializedName("results")
     @Expose
-    public List<TrendingMovieResult> results;
+    private List<T> results;
     @SerializedName("total_pages")
     @Expose
-    public int totalPages;
+    private int totalPages;
     @SerializedName("total_results")
     @Expose
-    public int totalResults;
+    private int totalResults;
 
     public int getPage() {
         return page;
     }
 
-    public List<TrendingMovieResult> getResults() {
+    public List<T> getResults() {
         return results;
     }
 

@@ -13,7 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.minhkakart.themoviedbapplication.R;
-import com.minhkakart.themoviedbapplication.models.network.MovieResult;
+import com.minhkakart.themoviedbapplication.models.network.TVResult;
 import com.minhkakart.themoviedbapplication.retrofit.service.TmdbImageApiService;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
@@ -23,18 +23,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.ViewHolder> {
-
-    private List<MovieResult> trendingMovieResults = new ArrayList<>();
+public class TVShowItemAdapter extends RecyclerView.Adapter<TVShowItemAdapter.TVShowItemViewHolder> {
+    private List<TVResult> tvResults = new ArrayList<>();
     private boolean pendingLoad = false;
     private static final int pendingItemCount = 5;
-
-    @SuppressLint("NotifyDataSetChanged")
-    public void update(List<MovieResult> trendingMovieResults) {
-        this.trendingMovieResults = trendingMovieResults;
-        pendingLoad = false;
-        notifyDataSetChanged();
-    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void setPendingLoad(boolean pendingLoad) {
@@ -42,20 +34,28 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
         notifyDataSetChanged();
     }
 
-    @NonNull
-    @Override
-    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_movie_item, parent, false);
-        return new ViewHolder(view);
+    @SuppressLint("NotifyDataSetChanged")
+    public void update(List<TVResult> tvResults) {
+        this.tvResults = tvResults;
+        pendingLoad = false;
+        notifyDataSetChanged();
     }
 
+    @NonNull
     @Override
-    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+    public TVShowItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_movie_item, parent, false);
+        return new TVShowItemViewHolder(view);
+    }
+
+
+    @Override
+    public void onBindViewHolder(@NonNull TVShowItemViewHolder holder, int position) {
         if (pendingLoad) {
             holder.bindPlaceholder();
             return;
         }
-        holder.bind(trendingMovieResults.get(position));
+        holder.bind(tvResults.get(position));
     }
 
     @Override
@@ -63,15 +63,15 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
         if (pendingLoad) {
             return pendingItemCount;
         }
-        return trendingMovieResults.size();
+        return tvResults.size();
     }
 
-    public static class ViewHolder extends RecyclerView.ViewHolder {
+    public static class TVShowItemViewHolder extends RecyclerView.ViewHolder {
         private final ImageView bgr;
         private final TextView tvMovieName, tvReleaseDate, tvVoteAverage;
         private final CircularProgressIndicator cpiRating;
 
-        public ViewHolder(@NonNull View itemView) {
+        public TVShowItemViewHolder(@NonNull View itemView) {
             super(itemView);
             bgr = itemView.findViewById(R.id.bgr);
             tvMovieName = itemView.findViewById(R.id.tvMovieName);
@@ -80,8 +80,8 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
             cpiRating = itemView.findViewById(R.id.cpiRating);
         }
 
-        public void bind(MovieResult trendingMovieResult) {
-            Picasso.get().load(TmdbImageApiService.getPosterMediumUrl(trendingMovieResult.getPosterPath()))
+        public void bind(TVResult tvResult) {
+            Picasso.get().load(TmdbImageApiService.getPosterMediumUrl(tvResult.getPosterPath()))
                     .placeholder(R.drawable.glyphicons_basic_38_picture_grey)
                     .error(R.drawable.image_load_failed)
                     .into(bgr, new Callback() {
@@ -96,9 +96,9 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
                         }
                     });
 
-            tvMovieName.setText(trendingMovieResult.getTitle());
-            float voteAverage = ((int) (trendingMovieResult.getVoteAverage() * 10)) / (float) 10;
-            if (voteAverage == 0 && trendingMovieResult.getVoteCount() == 0) {
+            tvMovieName.setText(tvResult.getName());
+            float voteAverage = ((int) (tvResult.getVoteAverage() * 10)) / (float) 10;
+            if (voteAverage == 0 && tvResult.getVoteCount() == 0) {
                 tvVoteAverage.setText("N/R");
                 cpiRating.setProgress(0);
             } else if (voteAverage < 2.5) {
@@ -118,7 +118,7 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
             tvVoteAverage.setText(String.valueOf(voteAverage));
             cpiRating.setProgress((int) (voteAverage * 10));
             try {
-                String displayDate = SimpleDateFormat.getDateInstance().format(trendingMovieResult.getReleaseDateAsDate());
+                String displayDate = SimpleDateFormat.getDateInstance().format(tvResult.getReleaseDateAsDate());
                 tvReleaseDate.setText(displayDate);
             } catch (ParseException e) {
                 throw new RuntimeException(e);

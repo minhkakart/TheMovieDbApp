@@ -1,11 +1,12 @@
-package com.minhkakart.themoviedbapplication.retrofit.models.trending;
+package com.minhkakart.themoviedbapplication.models.network;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
+import com.minhkakart.themoviedbapplication.models.KnownFor;
 
 import java.util.List;
 
-public class TrendingPeopleResult extends TrendingResult {
+public class PeopleResult extends Result {
     @SerializedName("original_name")
     @Expose
     private String originalName;

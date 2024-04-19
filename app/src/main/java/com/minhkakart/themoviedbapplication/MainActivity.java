@@ -20,10 +20,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.tabs.TabLayout;
 import com.minhkakart.themoviedbapplication.activities.AllMovieActivity;
 import com.minhkakart.themoviedbapplication.adapters.MovieItemAdapter;
+import com.minhkakart.themoviedbapplication.adapters.TVShowItemAdapter;
 import com.minhkakart.themoviedbapplication.adapters.TrailerItemAdapter;
-import com.minhkakart.themoviedbapplication.retrofit.models.trending.TrendingMovieResponse;
-import com.minhkakart.themoviedbapplication.retrofit.models.trending.TrendingMovieResult;
-import com.minhkakart.themoviedbapplication.retrofit.models.trending.TrendingResult;
+import com.minhkakart.themoviedbapplication.models.network.PaginateResponse;
+import com.minhkakart.themoviedbapplication.models.network.MovieResult;
+import com.minhkakart.themoviedbapplication.models.network.Result;
+import com.minhkakart.themoviedbapplication.models.network.TVResult;
 import com.minhkakart.themoviedbapplication.retrofit.service.TmdbApiService;
 import com.minhkakart.themoviedbapplication.retrofit.service.TmdbImageApiService;
 import com.minhkakart.themoviedbapplication.retrofit.service.TmdbService;
@@ -41,6 +43,7 @@ import retrofit2.Response;
 public class MainActivity extends AppCompatActivity {
     public static final TmdbApiService tmdbApi = TmdbService.getTmdbInstance();
     private MovieItemAdapter trendingListAdapter, moviesListAdapter;
+    private TVShowItemAdapter tvShowsListAdapter;
     private ImageView ivTrailerBgr;
     private static List<String> trailerBackDropPaths = new ArrayList<>();
     private static Handler handler;
@@ -76,10 +79,15 @@ public class MainActivity extends AppCompatActivity {
             startActivity(seeAllMovies);
         });
 
+        initAll();
+
+    }
+
+    private void initAll() {
         initTrending();
         getUpcomingTrailers();
         initMoviesList();
-
+        initTvShowsList();
     }
 
     private void getUpcomingTrailers() {
@@ -91,20 +99,20 @@ public class MainActivity extends AppCompatActivity {
 
         trailerItemAdapter.setPendingLoad(true);
 
-        Call<TrendingMovieResponse> call = tmdbApi.getMoviesList("upcoming", 1);
-        call.enqueue(new Callback<TrendingMovieResponse>() {
+        Call<PaginateResponse<MovieResult>> call = tmdbApi.getMoviesList("upcoming", 1);
+        call.enqueue(new Callback<PaginateResponse<MovieResult>>() {
             @Override
-            public void onResponse(@NonNull Call<TrendingMovieResponse> call, @NonNull Response<TrendingMovieResponse> response) {
-                TrendingMovieResponse trendingMovieResponse = response.body();
-                assert trendingMovieResponse != null;
-                List<TrendingMovieResult> movieResults = trendingMovieResponse.getResults();
-                trailerBackDropPaths = movieResults.stream().map(TrendingResult::getBackdropPath).collect(Collectors.toList());
+            public void onResponse(@NonNull Call<PaginateResponse<MovieResult>> call, @NonNull Response<PaginateResponse<MovieResult>> response) {
+                PaginateResponse<MovieResult> paginateResponse = response.body();
+                assert paginateResponse != null;
+                List<MovieResult> movieResults = paginateResponse.getResults();
+                trailerBackDropPaths = movieResults.stream().map(Result::getBackdropPath).collect(Collectors.toList());
                 handleChangeTrailerBgr();
                 trailerItemAdapter.setMovieList(movieResults);
             }
 
             @Override
-            public void onFailure(@NonNull Call<TrendingMovieResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<PaginateResponse<MovieResult>> call, @NonNull Throwable t) {
                 Log.e("Upcoming", "Error: " + t.getMessage());
             }
         });
@@ -116,9 +124,9 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
                 if (tab.getPosition() == 0){
-                    getTrending("week");
-                } else {
                     getTrending("day");
+                } else {
+                    getTrending("week");
                 }
             }
         });
@@ -132,17 +140,17 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getTrending(String timeWindow) {
-        Call<TrendingMovieResponse> call = tmdbApi.getTrendingMovie(timeWindow);
-        call.enqueue(new Callback<TrendingMovieResponse>() {
+        Call<PaginateResponse<MovieResult>> call = tmdbApi.getTrendingMovie(timeWindow);
+        call.enqueue(new Callback<PaginateResponse<MovieResult>>() {
             @Override
-            public void onResponse(@NonNull Call<TrendingMovieResponse> call, @NonNull Response<TrendingMovieResponse> response) {
-                TrendingMovieResponse trendingMovieResponse = response.body();
-                assert trendingMovieResponse != null;
-                trendingListAdapter.update(trendingMovieResponse.getResults());
+            public void onResponse(@NonNull Call<PaginateResponse<MovieResult>> call, @NonNull Response<PaginateResponse<MovieResult>> response) {
+                PaginateResponse<MovieResult> paginateResponse = response.body();
+                assert paginateResponse != null;
+                trendingListAdapter.update(paginateResponse.getResults());
             }
 
             @Override
-            public void onFailure(@NonNull Call<TrendingMovieResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<PaginateResponse<MovieResult>> call, @NonNull Throwable t) {
                 Log.e("Trending", "Error: " + t.getMessage());
             }
         });
@@ -176,18 +184,62 @@ public class MainActivity extends AppCompatActivity {
 
     private void getMoviesList(String keyword) {
         moviesListAdapter.setPendingLoad(true);
-        Call<TrendingMovieResponse> call = tmdbApi.getMoviesList(keyword, 1);
-        call.enqueue(new Callback<TrendingMovieResponse>() {
+        Call<PaginateResponse<MovieResult>> call = tmdbApi.getMoviesList(keyword, 1);
+        call.enqueue(new Callback<PaginateResponse<MovieResult>>() {
             @Override
-            public void onResponse(@NonNull Call<TrendingMovieResponse> call, @NonNull Response<TrendingMovieResponse> response) {
-                TrendingMovieResponse trendingMovieResponse = response.body();
-                assert trendingMovieResponse != null;
-                moviesListAdapter.update(trendingMovieResponse.getResults());
+            public void onResponse(@NonNull Call<PaginateResponse<MovieResult>> call, @NonNull Response<PaginateResponse<MovieResult>> response) {
+                PaginateResponse<MovieResult> paginateResponse = response.body();
+                assert paginateResponse != null;
+                moviesListAdapter.update(paginateResponse.getResults());
             }
 
             @Override
-            public void onFailure(@NonNull Call<TrendingMovieResponse> call, @NonNull Throwable t) {
+            public void onFailure(@NonNull Call<PaginateResponse<MovieResult>> call, @NonNull Throwable t) {
                 Log.e("MoviesList", "Error: " + t.getMessage());
+            }
+        });
+    }
+
+    private void initTvShowsList() {
+        RecyclerView rvTvShowsList = findViewById(R.id.rvTVsList);
+        rvTvShowsList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
+        tvShowsListAdapter = new TVShowItemAdapter();
+        rvTvShowsList.setAdapter(tvShowsListAdapter);
+
+        TabLayout tlTvShowsList = findViewById(R.id.tlTVsList);
+        tlTvShowsList.addOnTabSelectedListener(new CustomOnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                if (tab.getPosition() == 0) {
+                    getTvShowsList("popular");
+                } else if (tab.getPosition() == 1) {
+                    getTvShowsList("on_the_air");
+                } else if (tab.getPosition() == 2) {
+                    getTvShowsList("airing_today");
+                } else {
+                    getTvShowsList("top_rated");
+                }
+            }
+        });
+
+        getTvShowsList("popular");
+
+    }
+
+    private void getTvShowsList(String keyword) {
+        tvShowsListAdapter.setPendingLoad(true);
+        Call<PaginateResponse<TVResult>> call = tmdbApi.getTVsList(keyword, 1);
+        call.enqueue(new Callback<PaginateResponse<TVResult>>() {
+            @Override
+            public void onResponse(@NonNull Call<PaginateResponse<TVResult>> call, @NonNull Response<PaginateResponse<TVResult>> response) {
+                PaginateResponse<TVResult> paginateResponse = response.body();
+                assert paginateResponse != null;
+                tvShowsListAdapter.update(paginateResponse.getResults());
+            }
+
+            @Override
+            public void onFailure(@NonNull Call<PaginateResponse<TVResult>> call, @NonNull Throwable t) {
+                Log.e("TvShowsList", "Error: " + t.getMessage());
             }
         });
     }

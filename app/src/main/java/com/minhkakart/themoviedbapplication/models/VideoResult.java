@@ -1,4 +1,4 @@
-package com.minhkakart.themoviedbapplication.retrofit.models;
+package com.minhkakart.themoviedbapplication.models;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;

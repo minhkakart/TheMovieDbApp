@@ -1,10 +1,7 @@
 package com.minhkakart.themoviedbapplication.adapters;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
-import android.media.AudioAttributes;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -19,13 +16,12 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.minhkakart.themoviedbapplication.MainActivity;
 import com.minhkakart.themoviedbapplication.R;
 import com.minhkakart.themoviedbapplication.configure.EnvironmentVariable;
-import com.minhkakart.themoviedbapplication.retrofit.models.MovieDetail;
-import com.minhkakart.themoviedbapplication.retrofit.models.VideoResult;
-import com.minhkakart.themoviedbapplication.retrofit.models.trending.TrendingMovieResult;
+import com.minhkakart.themoviedbapplication.models.entities.Movie;
+import com.minhkakart.themoviedbapplication.models.VideoResult;
+import com.minhkakart.themoviedbapplication.models.network.MovieResult;
 import com.minhkakart.themoviedbapplication.retrofit.service.TmdbImageApiService;
 import com.squareup.picasso.Picasso;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,7 +30,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 
 public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.TrailerItemViewHolder> {
-    private List<TrendingMovieResult> movieList = new ArrayList<>();
+    private List<MovieResult> movieList = new ArrayList<>();
     private boolean pendingLoad = false;
     private static final int pendingItemCount = 5;
 
@@ -45,7 +41,7 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
     }
 
     @SuppressLint("NotifyDataSetChanged")
-    public void setMovieList(List<TrendingMovieResult> movieList) {
+    public void setMovieList(List<MovieResult> movieList) {
         this.movieList = movieList;
         pendingLoad = false;
         notifyDataSetChanged();
@@ -64,7 +60,7 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
             holder.bindPlaceholder();
             return;
         }
-        TrendingMovieResult movieResult = movieList.get(position);
+        MovieResult movieResult = movieList.get(position);
         holder.bind(movieResult);
     }
 
@@ -88,23 +84,23 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
             ivPlay = itemView.findViewById(R.id.iv_play_icon);
         }
 
-        public void bind(TrendingMovieResult movieResult) {
-            Call<MovieDetail> movieDetailCall = MainActivity.tmdbApi.getMovieDetail(movieResult.getId(), "videos");
-            movieDetailCall.enqueue(new Callback<MovieDetail>() {
+        public void bind(MovieResult movieResult) {
+            Call<Movie> movieDetailCall = MainActivity.tmdbApi.getMovieDetail(movieResult.getId(), "videos");
+            movieDetailCall.enqueue(new Callback<Movie>() {
                 @Override
-                public void onResponse(@NonNull Call<MovieDetail> call, @NonNull Response<MovieDetail> response) {
+                public void onResponse(@NonNull Call<Movie> call, @NonNull Response<Movie> response) {
                     if (response.isSuccessful()) {
-                        MovieDetail movieDetail = response.body();
-                        if (movieDetail != null) {
+                        Movie movie = response.body();
+                        if (movie != null) {
                             Picasso.get()
-                                    .load(TmdbImageApiService.getBackdropMediumUrl(movieDetail.getBackdropPath()))
+                                    .load(TmdbImageApiService.getBackdropMediumUrl(movie.getBackdropPath()))
                                     .placeholder(R.drawable.play_button_svgrepo_com)
                                     .error(R.drawable.image_load_failed)
                                     .into(ivTrailer, new com.squareup.picasso.Callback() {
                                         @Override
                                         public void onSuccess() {
-                                            tvTrailerName.setText(movieDetail.getTitle());
-                                            for (VideoResult videoResult : movieDetail.getVideos().getResults()) {
+                                            tvTrailerName.setText(movie.getTitle());
+                                            for (VideoResult videoResult : movie.getVideoAppendToResponse().getResults()) {
                                                 if (videoResult.getType().equals("Trailer") && videoResult.getSite().equals("YouTube")) {
                                                     tvTrailerDesc.setText(videoResult.getName());
                                                     ivPlay.setOnClickListener(v -> {
@@ -128,7 +124,7 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
                 }
 
                 @Override
-                public void onFailure(@NonNull Call<MovieDetail> call, @NonNull Throwable throwable) {
+                public void onFailure(@NonNull Call<Movie> call, @NonNull Throwable throwable) {
 
                 }
             });

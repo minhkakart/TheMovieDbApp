@@ -1,4 +1,4 @@
-package com.minhkakart.themoviedbapplication.retrofit.models;
+package com.minhkakart.themoviedbapplication.models;
 
 public class Genre {
     private int id;

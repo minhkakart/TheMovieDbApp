@@ -1,11 +1,11 @@
-package com.minhkakart.themoviedbapplication.retrofit.models.trending;
+package com.minhkakart.themoviedbapplication.models.network;
 
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.util.List;
 
-public class TrendingResult {
+public class Result {
     @SerializedName("backdrop_path")
     @Expose
     protected String backdropPath;

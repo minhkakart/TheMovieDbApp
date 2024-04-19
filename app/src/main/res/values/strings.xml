@@ -28,4 +28,7 @@
     <string name="top_rated">Top rated</string>
     <string name="movies">Movies</string>
     <string name="see_all">See all\ </string>
+    <string name="airing_today">Airing today</string>
+    <string name="onTv">On TV</string>
+    <string name="logo">Logo</string>
 </resources>

@@ -366,6 +366,115 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/clTVs"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.1">
+
+            <!--            <ImageView-->
+            <!--                android:id="@+id/ivTVBgr"-->
+            <!--                android:layout_width="match_parent"-->
+            <!--                android:layout_height="160dp"-->
+            <!--                android:background="@drawable/trending_bg"-->
+            <!--                android:contentDescription="@string/trending_bgr"-->
+            <!--                android:scaleX="3"-->
+            <!--                android:scaleY="2"-->
+            <!--                app:layout_constraintBottom_toBottomOf="parent" />-->
+
+            <TextView
+                android:id="@+id/tvTV"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="12dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="10dp"
+                android:text="@string/movies"
+                android:textColor="@color/black"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/tlTVsList"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <com.google.android.material.tabs.TabLayout
+                android:id="@+id/tlTVsList"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/trending_tab_layout_transparent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/tvTV"
+                android:layout_marginTop="8dp"
+                app:tabGravity="center"
+                app:tabIndicator="@drawable/trending_tab_indicator_bgr"
+                app:tabIndicatorColor="@android:color/transparent"
+                app:tabIndicatorFullWidth="true"
+                app:tabIndicatorGravity="stretch"
+                app:tabMode="scrollable"
+                app:tabSelectedTextColor="#1ed5a9"
+                app:tabTextAppearance="@style/CustomTabTextAppearance"
+                app:tabTextColor="@android:color/black">
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItemTvPopular"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/popular" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItemAiringToday"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/airing_today" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItemOnTv"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/onTv" />
+
+                <com.google.android.material.tabs.TabItem
+                    android:id="@+id/tabItemTvTopRated"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="@string/top_rated" />
+
+            </com.google.android.material.tabs.TabLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btnSeeAllTVs"
+                android:layout_width="wrap_content"
+                android:layout_height="30dp"
+                android:background="@drawable/popular_tab_indicator_bgr"
+                android:backgroundTint="@android:color/transparent"
+                android:backgroundTintMode="src_atop"
+                android:drawableEnd="@drawable/arrow_right_black"
+                android:paddingHorizontal="16dp"
+                android:layout_marginTop="12dp"
+                android:text="@string/see_all"
+                android:textAllCaps="false"
+                android:textColor="@color/black"
+                app:layout_constraintTop_toBottomOf="@id/tlTVsList"
+                app:layout_constraintEnd_toEndOf="@+id/tlTVsList" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvTVsList"
+                android:layout_width="match_parent"
+                android:layout_height="320dp"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal"
+                app:layout_constraintTop_toBottomOf="@+id/btnSeeAllTVs" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <include layout="@layout/footer" />
+
     </LinearLayout>
 
 </ScrollView>
