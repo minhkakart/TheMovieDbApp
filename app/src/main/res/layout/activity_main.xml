@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/white">
+    android:background="@color/white"
+    tools:context=".MainActivity">
 
     <LinearLayout
         android:id="@+id/main"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical"
-        tools:context=".MainActivity">
+        android:orientation="vertical">
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/clHeader"
@@ -131,89 +132,17 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clTrending"
-            android:layout_width="match_parent"
-            android:layout_height="370dp"
-            android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1">
-
-            <ImageView
-                android:id="@+id/ivTrendingBgr"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="@drawable/trending_bg"
-                android:contentDescription="@string/trending_bgr"
-                android:scaleX="3"
-                android:scaleY="2"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <TextView
-                android:id="@+id/tvTrending"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/trending_label"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tlTrending"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:layout_marginStart="20dp"
-                android:background="@drawable/trending_tab_layout_transparent"
-                app:layout_constraintBottom_toBottomOf="@+id/tvTrending"
-                app:layout_constraintStart_toEndOf="@+id/tvTrending"
-                app:layout_constraintTop_toTopOf="@+id/tvTrending"
-                app:tabGravity="center"
-                app:tabIndicator="@drawable/trending_tab_indicator_bgr"
-                app:tabIndicatorColor="@android:color/transparent"
-                app:tabIndicatorFullWidth="true"
-                app:tabIndicatorGravity="stretch"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="#1ed5a9"
-                app:tabTextAppearance="@style/CustomTabTextAppearance"
-                app:tabTextColor="@android:color/black">
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemToday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/trending_item_today" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemWeek"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/trending_item_week" />
-
-            </com.google.android.material.tabs.TabLayout>
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTrending"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/tlTrending" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+        <include
+            android:id="@+id/trending_section"
+            layout="@layout/movies_section_vertical"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp" />
 
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="350dp"
-            android:layout_marginTop="12dp"
+            android:layout_marginTop="24dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -258,220 +187,19 @@
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clMovies"
-            android:layout_width="match_parent"
+        <include
+            android:id="@+id/all_movie_section"
+            layout="@layout/movies_section_vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1">
+            android:layout_marginTop="24dp" />
 
-            <ImageView
-                android:id="@+id/ivMovieBgr"
-                android:layout_width="match_parent"
-                android:layout_height="160dp"
-                android:background="@drawable/trending_bg"
-                android:contentDescription="@string/trending_bgr"
-                android:scaleX="3"
-                android:scaleY="2"
-                app:layout_constraintBottom_toBottomOf="parent" />
-
-            <TextView
-                android:id="@+id/tvMovie"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/movies"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/tlMoviesList"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tlMoviesList"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:background="@drawable/trending_tab_layout_transparent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvMovie"
-                android:layout_marginTop="8dp"
-                app:tabGravity="center"
-                app:tabIndicator="@drawable/trending_tab_indicator_bgr"
-                app:tabIndicatorColor="@android:color/transparent"
-                app:tabIndicatorFullWidth="true"
-                app:tabIndicatorGravity="stretch"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="#1ed5a9"
-                app:tabTextAppearance="@style/CustomTabTextAppearance"
-                app:tabTextColor="@android:color/black">
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemPopular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/popular" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemNowPlaying"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/now_playing" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemUpcoming"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/upcoming" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemTopRated"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/top_rated" />
-
-            </com.google.android.material.tabs.TabLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSeeAllMovies"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:background="@drawable/popular_tab_indicator_bgr"
-                android:backgroundTint="@android:color/transparent"
-                android:backgroundTintMode="src_atop"
-                android:drawableEnd="@drawable/arrow_right_black"
-                android:paddingHorizontal="16dp"
-                android:layout_marginTop="12dp"
-                android:text="@string/see_all"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/tlMoviesList"
-                app:layout_constraintEnd_toEndOf="@+id/tlMoviesList" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvMoviesList"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/btnSeeAllMovies" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/clTVs"
-            android:layout_width="match_parent"
+        <include
+            android:id="@+id/tv_show_section"
+            layout="@layout/movies_section_vertical"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.1">
-
-            <!--            <ImageView-->
-            <!--                android:id="@+id/ivTVBgr"-->
-            <!--                android:layout_width="match_parent"-->
-            <!--                android:layout_height="160dp"-->
-            <!--                android:background="@drawable/trending_bg"-->
-            <!--                android:contentDescription="@string/trending_bgr"-->
-            <!--                android:scaleX="3"-->
-            <!--                android:scaleY="2"-->
-            <!--                app:layout_constraintBottom_toBottomOf="parent" />-->
-
-            <TextView
-                android:id="@+id/tvTV"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="12dp"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="10dp"
-                android:text="@string/movies"
-                android:textColor="@color/black"
-                android:textSize="18sp"
-                android:textStyle="bold"
-                app:layout_constraintStart_toStartOf="@+id/tlTVsList"
-                app:layout_constraintTop_toTopOf="parent" />
-
-            <com.google.android.material.tabs.TabLayout
-                android:id="@+id/tlTVsList"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:background="@drawable/trending_tab_layout_transparent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/tvTV"
-                android:layout_marginTop="8dp"
-                app:tabGravity="center"
-                app:tabIndicator="@drawable/trending_tab_indicator_bgr"
-                app:tabIndicatorColor="@android:color/transparent"
-                app:tabIndicatorFullWidth="true"
-                app:tabIndicatorGravity="stretch"
-                app:tabMode="scrollable"
-                app:tabSelectedTextColor="#1ed5a9"
-                app:tabTextAppearance="@style/CustomTabTextAppearance"
-                app:tabTextColor="@android:color/black">
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemTvPopular"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/popular" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemAiringToday"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/airing_today" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemOnTv"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/onTv" />
-
-                <com.google.android.material.tabs.TabItem
-                    android:id="@+id/tabItemTvTopRated"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/top_rated" />
-
-            </com.google.android.material.tabs.TabLayout>
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSeeAllTVs"
-                android:layout_width="wrap_content"
-                android:layout_height="30dp"
-                android:background="@drawable/popular_tab_indicator_bgr"
-                android:backgroundTint="@android:color/transparent"
-                android:backgroundTintMode="src_atop"
-                android:drawableEnd="@drawable/arrow_right_black"
-                android:paddingHorizontal="16dp"
-                android:layout_marginTop="12dp"
-                android:text="@string/see_all"
-                android:textAllCaps="false"
-                android:textColor="@color/black"
-                app:layout_constraintTop_toBottomOf="@id/tlTVsList"
-                app:layout_constraintEnd_toEndOf="@+id/tlTVsList" />
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/rvTVsList"
-                android:layout_width="match_parent"
-                android:layout_height="320dp"
-                android:layout_marginTop="12dp"
-                android:orientation="horizontal"
-                app:layout_constraintTop_toBottomOf="@+id/btnSeeAllTVs" />
-
-        </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_marginTop="24dp" />
 
         <include layout="@layout/footer" />
 

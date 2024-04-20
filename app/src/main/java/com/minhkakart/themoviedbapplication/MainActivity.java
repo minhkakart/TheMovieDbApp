@@ -5,8 +5,11 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.util.Log;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.TextView;
 
 import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
@@ -33,6 +36,7 @@ import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 import java.util.stream.Collectors;
 
@@ -71,12 +75,6 @@ public class MainActivity extends AppCompatActivity {
                     .load(TmdbImageApiService.getBackdropMediumUrl(trailerBackDropPaths.get(pos)))
                     .error(R.drawable.image_load_failed)
                     .into(ivTrailerBgr, new PicassoCallBack());
-        });
-
-        Button btnSeeAllMovies = findViewById(R.id.btnSeeAllMovies);
-        btnSeeAllMovies.setOnClickListener(v -> {
-            Intent seeAllMovies = new Intent(this, AllMovieActivity.class);
-            startActivity(seeAllMovies);
         });
 
         initAll();
@@ -119,7 +117,19 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTrending() {
-        TabLayout tlTrending = findViewById(R.id.tlTrending);
+        ViewGroup trendingSection = findViewById(R.id.trending_section);
+        Button btnSeeAllTrending = trendingSection.findViewById(R.id.btnSeeAll);
+        btnSeeAllTrending.setVisibility(Button.GONE);
+
+        TextView tvTitle = trendingSection.findViewById(R.id.tvTitle);
+        tvTitle.setText(R.string.trending_label);
+
+        TabLayout tlTrending = trendingSection.findViewById(R.id.tlMovies);
+        View v = Objects.requireNonNull(tlTrending.getTabAt(0)).getCustomView();
+
+        tlTrending.removeAllTabs();
+        tlTrending.addTab(tlTrending.newTab().setText("Today").setCustomView(v), true);
+        tlTrending.addTab(tlTrending.newTab().setText("This Week").setCustomView(v));
         tlTrending.addOnTabSelectedListener(new CustomOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -131,7 +141,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        RecyclerView rvTrending = findViewById(R.id.rvTrending);
+        RecyclerView rvTrending = trendingSection.findViewById(R.id.rvMovies);
         rvTrending.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         trendingListAdapter = new MovieItemAdapter();
         rvTrending.setAdapter(trendingListAdapter);
@@ -140,6 +150,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void getTrending(String timeWindow) {
+        trendingListAdapter.setPendingLoad(true);
         Call<PaginateResponse<MovieResult>> call = tmdbApi.getTrendingMovie(timeWindow);
         call.enqueue(new Callback<PaginateResponse<MovieResult>>() {
             @Override
@@ -157,12 +168,30 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initMoviesList() {
-        RecyclerView rvMoviesList = findViewById(R.id.rvMoviesList);
+        ViewGroup moviesSection = findViewById(R.id.all_movie_section);
+        TextView tvTitle = moviesSection.findViewById(R.id.tvTitle);
+        tvTitle.setText(R.string.movies);
+        RecyclerView rvMoviesList = moviesSection.findViewById(R.id.rvMovies);
         rvMoviesList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         moviesListAdapter = new MovieItemAdapter();
         rvMoviesList.setAdapter(moviesListAdapter);
 
-        TabLayout tlMoviesList = findViewById(R.id.tlMoviesList);
+        Button btnSeeAllMovies = moviesSection.findViewById(R.id.btnSeeAll);
+        btnSeeAllMovies.setOnClickListener(v -> {
+            Intent seeAllMovies = new Intent(this, AllMovieActivity.class);
+            startActivity(seeAllMovies);
+        });
+
+        TabLayout tlMoviesList = moviesSection.findViewById(R.id.tlMovies);
+
+        View v = Objects.requireNonNull(tlMoviesList.getTabAt(0)).getCustomView();
+
+        tlMoviesList.removeAllTabs();
+        tlMoviesList.addTab(tlMoviesList.newTab().setText("Popular").setCustomView(v));
+        tlMoviesList.addTab(tlMoviesList.newTab().setText("Now Playing").setCustomView(v));
+        tlMoviesList.addTab(tlMoviesList.newTab().setText("Upcoming").setCustomView(v));
+        tlMoviesList.addTab(tlMoviesList.newTab().setText("Top Rated").setCustomView(v));
+
         tlMoviesList.addOnTabSelectedListener(new CustomOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -201,12 +230,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void initTvShowsList() {
-        RecyclerView rvTvShowsList = findViewById(R.id.rvTVsList);
+        ViewGroup tvShowsSection = findViewById(R.id.tv_show_section);
+        TextView tvTitle = tvShowsSection.findViewById(R.id.tvTitle);
+        tvTitle.setText(R.string.tv_shows);
+        RecyclerView rvTvShowsList = tvShowsSection.findViewById(R.id.rvMovies);
         rvTvShowsList.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         tvShowsListAdapter = new TVShowItemAdapter();
         rvTvShowsList.setAdapter(tvShowsListAdapter);
 
-        TabLayout tlTvShowsList = findViewById(R.id.tlTVsList);
+        TabLayout tlTvShowsList = tvShowsSection.findViewById(R.id.tlMovies);
+
+        View v = Objects.requireNonNull(tlTvShowsList.getTabAt(0)).getCustomView();
+
+        tlTvShowsList.removeAllTabs();
+        tlTvShowsList.addTab(tlTvShowsList.newTab().setText("Popular").setCustomView(v));
+        tlTvShowsList.addTab(tlTvShowsList.newTab().setText("On The Air").setCustomView(v));
+        tlTvShowsList.addTab(tlTvShowsList.newTab().setText("Airing Today").setCustomView(v));
+        tlTvShowsList.addTab(tlTvShowsList.newTab().setText("Top Rated").setCustomView(v));
         tlTvShowsList.addOnTabSelectedListener(new CustomOnTabSelectedListener() {
             @Override
             public void onTabSelected(TabLayout.Tab tab) {
@@ -245,7 +285,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void handleChangeTrailerBgr() {
-        handler.postDelayed(changeTrailerBgr, LOOP_DELAY);
+        handler.postDelayed(changeTrailerBgr, 0);
     }
 
     private static class PicassoCallBack implements com.squareup.picasso.Callback {
