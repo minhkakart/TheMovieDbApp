@@ -1,4 +1,4 @@
-package com.minhkakart.themoviedbapplication.retrofit.service;
+package com.minhkakart.themoviedbapplication.tmdb.service;
 
 import com.minhkakart.themoviedbapplication.configure.EnvironmentVariable;
 

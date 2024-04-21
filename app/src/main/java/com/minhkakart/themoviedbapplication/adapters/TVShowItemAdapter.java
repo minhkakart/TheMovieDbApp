@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.minhkakart.themoviedbapplication.R;
 import com.minhkakart.themoviedbapplication.models.network.TVResult;
-import com.minhkakart.themoviedbapplication.retrofit.service.TmdbImageApiService;
+import com.minhkakart.themoviedbapplication.tmdb.TmdbImageUrlGetter;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -44,7 +44,7 @@ public class TVShowItemAdapter extends RecyclerView.Adapter<TVShowItemAdapter.TV
     @NonNull
     @Override
     public TVShowItemViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_movie_item, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_movie_item_horizontal, parent, false);
         return new TVShowItemViewHolder(view);
     }
 
@@ -81,7 +81,7 @@ public class TVShowItemAdapter extends RecyclerView.Adapter<TVShowItemAdapter.TV
         }
 
         public void bind(TVResult tvResult) {
-            Picasso.get().load(TmdbImageApiService.getPosterMediumUrl(tvResult.getPosterPath()))
+            Picasso.get().load(TmdbImageUrlGetter.getPosterMediumUrl(tvResult.getPosterPath()))
                     .placeholder(R.drawable.glyphicons_basic_38_picture_grey)
                     .error(R.drawable.image_load_failed)
                     .into(bgr, new Callback() {
@@ -121,7 +121,8 @@ public class TVShowItemAdapter extends RecyclerView.Adapter<TVShowItemAdapter.TV
                 String displayDate = SimpleDateFormat.getDateInstance().format(tvResult.getReleaseDateAsDate());
                 tvReleaseDate.setText(displayDate);
             } catch (ParseException e) {
-                throw new RuntimeException(e);
+                tvReleaseDate.setText("N/A");
+                Log.e("Adapter", "bind: ", e);
             }
         }
 

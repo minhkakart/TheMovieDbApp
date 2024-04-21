@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="140dp"
     android:layout_height="310dp"
+    android:layout_centerInParent="true"
     android:layout_marginHorizontal="10dp"
     android:layout_marginVertical="4dp">
 
@@ -12,7 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="210dp"
         app:cardCornerRadius="12dp"
-
         app:layout_constraintTop_toTopOf="parent">
 
         <ImageView
@@ -24,6 +24,16 @@
             android:src="@drawable/poster" />
 
     </androidx.cardview.widget.CardView>
+
+    <ImageView
+        android:id="@+id/ivMore"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/glyphicons_basic_947_circle_more_white"
+        android:translationZ="2dp"
+        app:layout_constraintTop_toTopOf="@+id/cardView"
+        app:layout_constraintEnd_toEndOf="@+id/cardView"
+        android:contentDescription="@string/icon_more" />
 
     <TextView
         android:id="@+id/tvMovieName"

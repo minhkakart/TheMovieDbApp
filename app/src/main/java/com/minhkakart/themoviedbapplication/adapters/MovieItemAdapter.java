@@ -14,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.material.progressindicator.CircularProgressIndicator;
 import com.minhkakart.themoviedbapplication.R;
 import com.minhkakart.themoviedbapplication.models.network.MovieResult;
-import com.minhkakart.themoviedbapplication.retrofit.service.TmdbImageApiService;
+import com.minhkakart.themoviedbapplication.tmdb.TmdbImageUrlGetter;
 import com.squareup.picasso.Callback;
 import com.squareup.picasso.Picasso;
 
@@ -28,6 +28,15 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
     private List<MovieResult> trendingMovieResults = new ArrayList<>();
     private boolean pendingLoad = false;
     private static final int pendingItemCount = 5;
+
+    private boolean isHorizontal = true;
+
+    public MovieItemAdapter() {
+    }
+
+    public MovieItemAdapter(boolean isHorizontal) {
+        this.isHorizontal = isHorizontal;
+    }
 
     @SuppressLint("NotifyDataSetChanged")
     public void update(List<MovieResult> trendingMovieResults) {
@@ -45,7 +54,8 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.rv_movie_item, parent, false);
+        int resItem = isHorizontal ? R.layout.rv_movie_item_horizontal : R.layout.rv_movie_item_vertical;
+        View view = LayoutInflater.from(parent.getContext()).inflate(resItem, parent, false);
         return new ViewHolder(view);
     }
 
@@ -81,7 +91,7 @@ public class MovieItemAdapter extends RecyclerView.Adapter<MovieItemAdapter.View
         }
 
         public void bind(MovieResult trendingMovieResult) {
-            Picasso.get().load(TmdbImageApiService.getPosterMediumUrl(trendingMovieResult.getPosterPath()))
+            Picasso.get().load(TmdbImageUrlGetter.getPosterMediumUrl(trendingMovieResult.getPosterPath()))
                     .placeholder(R.drawable.glyphicons_basic_38_picture_grey)
                     .error(R.drawable.image_load_failed)
                     .into(bgr, new Callback() {

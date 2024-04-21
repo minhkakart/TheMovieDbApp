@@ -13,21 +13,16 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.minhkakart.themoviedbapplication.MainActivity;
 import com.minhkakart.themoviedbapplication.R;
 import com.minhkakart.themoviedbapplication.configure.EnvironmentVariable;
-import com.minhkakart.themoviedbapplication.models.entities.Movie;
 import com.minhkakart.themoviedbapplication.models.VideoResult;
 import com.minhkakart.themoviedbapplication.models.network.MovieResult;
-import com.minhkakart.themoviedbapplication.retrofit.service.TmdbImageApiService;
+import com.minhkakart.themoviedbapplication.tmdb.TmdbApi;
+import com.minhkakart.themoviedbapplication.tmdb.TmdbImageUrlGetter;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
 
 public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.TrailerItemViewHolder> {
     private List<MovieResult> movieList = new ArrayList<>();
@@ -85,49 +80,39 @@ public class TrailerItemAdapter extends RecyclerView.Adapter<TrailerItemAdapter.
         }
 
         public void bind(MovieResult movieResult) {
-            Call<Movie> movieDetailCall = MainActivity.tmdbApi.getMovieDetail(movieResult.getId(), "videos");
-            movieDetailCall.enqueue(new Callback<Movie>() {
-                @Override
-                public void onResponse(@NonNull Call<Movie> call, @NonNull Response<Movie> response) {
-                    if (response.isSuccessful()) {
-                        Movie movie = response.body();
-                        if (movie != null) {
-                            Picasso.get()
-                                    .load(TmdbImageApiService.getBackdropMediumUrl(movie.getBackdropPath()))
-                                    .placeholder(R.drawable.play_button_svgrepo_com)
-                                    .error(R.drawable.image_load_failed)
-                                    .into(ivTrailer, new com.squareup.picasso.Callback() {
-                                        @Override
-                                        public void onSuccess() {
-                                            tvTrailerName.setText(movie.getTitle());
-                                            for (VideoResult videoResult : movie.getVideoAppendToResponse().getResults()) {
-                                                if (videoResult.getType().equals("Trailer") && videoResult.getSite().equals("YouTube")) {
-                                                    tvTrailerDesc.setText(videoResult.getName());
-                                                    ivPlay.setOnClickListener(v -> {
-                                                        // Open youtube
-                                                        Uri uri = Uri.parse(EnvironmentVariable.YOUTUBE_URL + videoResult.getKey());
-                                                        Intent openYoutube = new Intent(Intent.ACTION_VIEW, uri);
-                                                        v.getContext().startActivity(openYoutube);
-                                                    });
-                                                    break;
-                                                }
-                                            }
+            TmdbApi.getMovieDetail(movieResult.getId(), "videos", (response, throwable) -> {
+                if (response != null) {
+                    Picasso.get()
+                            .load(TmdbImageUrlGetter.getBackdropMediumUrl(response.getBackdropPath()))
+                            .placeholder(R.drawable.play_button_svgrepo_com)
+                            .error(R.drawable.image_load_failed)
+                            .into(ivTrailer, new com.squareup.picasso.Callback() {
+                                @Override
+                                public void onSuccess() {
+                                    tvTrailerName.setText(response.getTitle());
+                                    for (VideoResult videoResult : response.getVideoAppendToResponse().getResults()) {
+                                        if (videoResult.getType().equals("Trailer") && videoResult.getSite().equals("YouTube")) {
+                                            tvTrailerDesc.setText(videoResult.getName());
+                                            ivPlay.setOnClickListener(v -> {
+                                                // Open youtube
+                                                Uri uri = Uri.parse(EnvironmentVariable.YOUTUBE_URL + videoResult.getKey());
+                                                Intent openYoutube = new Intent(Intent.ACTION_VIEW, uri);
+                                                v.getContext().startActivity(openYoutube);
+                                            });
+                                            break;
                                         }
+                                    }
+                                }
 
-                                        @Override
-                                        public void onError(Exception e) {
-                                            Log.e("Picasso", "onError: ", e);
-                                        }
-                                    });
-                        }
-                    }
-                }
-
-                @Override
-                public void onFailure(@NonNull Call<Movie> call, @NonNull Throwable throwable) {
+                                @Override
+                                public void onError(Exception e) {
+                                    Log.e("Picasso", "onError: ", e);
+                                }
+                            });
 
                 }
             });
+
         }
 
         public void bindPlaceholder() {

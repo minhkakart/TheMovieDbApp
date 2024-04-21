@@ -1,8 +1,8 @@
-package com.minhkakart.themoviedbapplication.retrofit.service;
+package com.minhkakart.themoviedbapplication.tmdb;
 
 import com.minhkakart.themoviedbapplication.configure.EnvironmentVariable;
 
-public class TmdbImageApiService {
+public class TmdbImageUrlGetter {
 
     private static final String BASE_IMAGE_URL = EnvironmentVariable.IMAGE_URL;
 

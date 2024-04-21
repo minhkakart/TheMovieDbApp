@@ -12,7 +12,7 @@
     <string name="oscar_title">Oscar title</string>
     <string name="welcome">Welcome.</string>
     <string name="welcome_title">Millions of movies, TV shows and people to discover. Explore now.</string>
-    <string name="search_hint">Search for movies, TV shows, people...</string>
+    <string name="search_hint">Search for movies, TV shows, people…</string>
     <string name="search">Search</string>
     <string name="movie_name_eg">Biệt Đội Săn Ma: Kỷ Nguyên Băng Giá</string>
     <string name="release_date_eg">Mar 20, 2024</string>
@@ -32,4 +32,9 @@
     <string name="onTv">On TV</string>
     <string name="logo">Logo</string>
     <string name="tv_shows">TV shows</string>
+    <string name="all_movies">All Movies</string>
+    <string name="icon_more">Icon more</string>
+    <string name="previous">Previous</string>
+    <string name="next">Next</string>
+    <string name="page_number">1</string>
 </resources>
